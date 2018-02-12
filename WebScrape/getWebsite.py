@@ -1,23 +1,20 @@
 from bs4 import BeautifulSoup
 import urllib.request
 
-weburl = input("Enter website url you wish to scrape here (ex: www.google.com): ")
+weburl = 'https://coinmarketcap.com/'
 
-countdot = weburl.count('.')
+try:
+    webpage = urllib.request.urlopen(weburl).read()
+    soup = BeautifulSoup(webpage, 'lxml')
+    get_currency_name = soup.find_all('a', 'currency-name-container')
 
-if (countdot == 2):
+    count = 0
 
-    urlpart_one = weburl[:4]
+    while count < 100:
+        print ('Rank#: '+ str(count+1) + ' Name:' + str(get_currency_name[count].get_text()))
+        count = count + 1
 
-    if urlpart_one == "www.":
-        try:
-            addstr = "https://"
-            webpage = urllib.request.urlopen(addstr+weburl).read()
-            print ("Content Coming Soon :)")
-        except Exception as e:
-            print ("Unable to find website: " + str(e))
-    else:
-        print ("Incorrect url format" + countdot)
-else:
-    print ("Incorrect web url format")
+except Exception as e:
+    print ("Error: " + str(e))
+
 
